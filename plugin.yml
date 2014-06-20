@@ -1,4 +1,4 @@
 name: SimpleHome
-main: SimpleHome
+main: SimpleHome\SimpleHome
 version: 0.1
 api: 1.0.0
