@@ -15,7 +15,7 @@ use pocketmine\utils\Config;
 
 class SimpleHome extends PluginBase{
     public function onEnable(){
-        $conf = new Config("SimpleHome/homes.yml", Config::YAML, array());
+        $this->saveResource("homes.yml", false);
 
         $this->getLogger()->info("SimpleHome has loaded!");
 
