@@ -1,5 +1,5 @@
 <?php
-/**
+/** (Should I keep the phpstorm-generated file headers?)
  * User: Michael Leahy
  * Date: 6/20/14
  * Time: 4:45 PM
