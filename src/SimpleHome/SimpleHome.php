@@ -1,9 +1,4 @@
 <?php
-/** (Should I keep the phpstorm-generated file headers??)
- * User: Michael Leahy
- * Date: 6/20/14
- * Time: 4:45 PM
- */
 
 namespace SimpleHome;
 
@@ -14,6 +9,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
 class SimpleHome extends PluginBase{
+
     public function onEnable(){
         @mkdir($this->getDataFolder());
         $this->config = new Config($this->getDataFolder()."homes.yml", Config::YAML, array());
