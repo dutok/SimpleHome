@@ -16,7 +16,7 @@ use pocketmine\utils\Config;
 class SimpleHome extends PluginBase{
     public function onEnable(){
         @mkdir($this->getDataFolder());
-        $this->config = new Config($this->getDataFolder()."warps.yml", Config::YAML, array());
+        $this->config = new Config($this->getDataFolder()."homes.yml", Config::YAML, array());
         $this->getLogger()->info("SimpleHome has loaded!");
 
     }
