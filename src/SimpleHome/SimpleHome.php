@@ -32,9 +32,10 @@ class SimpleHome extends PluginBase{
                 break;
             case "sethome":
                 if ($sender instanceof Player) {
-                    if (isset($args[0])){
-                        //execute command here
-                    }
+                        $this->config->set($sender->getDisplayName(), array((int) $sender->x, (int) $sender->y, (int) $sender->z, $sender->getLevel()->getName()));
+                        $this->config->save();
+                        $sender->sendMessage("Your home is set.");
+                        $this->getLogger()->info($sender->getDisplayName() . " has set their home in world " . $sender->getLevel()->getName());
                 }
                 else {
                     $sender->sendMessage("Please run command in game.");
