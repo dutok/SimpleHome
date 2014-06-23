@@ -1,9 +1,24 @@
 name: SimpleHome
 main: SimpleHome\SimpleHome
+author: Dutok
 version: 1.0
 api: 1.0.0
 commands:
  home:
-  description: Teleports to your home
+  permission: simplehome.home
+  description: Teleports you home.
  sethome:
-  description: Sets your home
+  permission: simplehome.sethome
+  description: Sets your home.
+permissions:
+ simplehome:
+  default: op
+  description: Top permission
+  children:
+   simplehome.sethome:
+    default: true
+    description: Allows you to set your home
+   simplehome.home:
+    default: true
+    description: Allows you to teleport home
+
