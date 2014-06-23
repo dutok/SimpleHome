@@ -17,7 +17,9 @@ Commands | Description | Permission
 /sethome | Sets your home. | simplehome.sethome
 
 ## To-do:
-* Add permissions.
+
+
+
 
 ## License:
 The MIT License (MIT)
