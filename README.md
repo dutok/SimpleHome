@@ -17,8 +17,6 @@ Commands | Description | Permission
 /sethome | Sets your home. | simplehome.sethome
 
 ## To-do:
-* Add command execution code (Partially done, Still need to /home.)
-* Add plugin disabling code (Logging definitely. Maybe config file saving?)
 * Add permissions.
 
 ## License:
