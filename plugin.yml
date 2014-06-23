@@ -1,7 +1,7 @@
 name: SimpleHome
 main: SimpleHome\SimpleHome
 author: Dutok
-version: 1.0
+version: 1.1
 api: 1.0.0
 commands:
  home:
