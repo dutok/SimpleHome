@@ -46,4 +46,10 @@ class SimpleHome extends PluginBase{
                 return false;
         }
     }
+
+    public function onDisable(){
+        $this->getLogger()->info("SimpleHome has loaded!");
+        $this->config->save();
+
+    }
 }
