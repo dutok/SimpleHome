@@ -30,9 +30,10 @@ class SimpleHome extends PluginBase{
                         $homeY = $this->homeData->get($sender->getName())[1];
                         $homeZ = $this->homeData->get($sender->getName())[2];
                         $homeLevel = $this->homeData->get($sender->getName())[3];
-                        $pos = new Position((int) $homeX, (int) $homeY, (int) $homeZ, $homeLevel);
-                        foreach ($this->getServer()->getLevels() as $levelToCheck) {
-                            if ($homeLevel === $levelToCheck->getName()) {
+                        foreach ($this->getServer()->getLevels() as $levelsLoaded => $levelLoaded) {
+                            if ($homeLevel === $levelLoaded->getName()) {
+                                $actualLevel = $levelLoaded;
+                                $pos = new Position((int) $homeX, (int) $homeY, (int) $homeZ, $actualLevel);
                                 $sender->teleport($pos);
                             }
                             else {
