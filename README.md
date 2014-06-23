@@ -17,6 +17,5 @@ Commands | Description | Permission
 /sethome | Sets your home. | simplehome.sethome
 
 ## To-do:
-* [Test home data storage methods (config/resources)] (https://github.com/Learning-Pocketmine-development/PocketMine-Plugin-Tutorials/issues/1)
 * Add command execution code
 * Add plugin disabling code (Logging definitely. Maybe config file saving?)
