@@ -35,6 +35,7 @@ class SimpleHome extends PluginBase{
                                 $actualLevel = $levelLoaded;
                                 $pos = new Position((int) $homeX, (int) $homeY, (int) $homeZ, $actualLevel);
                                 $sender->teleport($pos);
+                                $sender->sendMessage("You teleported home.");
                             }
                             else {
                                 $sender->sendMessage("That world is not loaded!");

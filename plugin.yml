@@ -5,7 +5,5 @@ api: 1.0.0
 commands:
  home:
   description: Teleports to your home
-  usage: /home
  sethome:
   description: Sets your home
-  usage: /sethome
