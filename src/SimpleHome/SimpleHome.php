@@ -26,17 +26,18 @@ class SimpleHome extends PluginBase{
             case "home":
                 if ($sender instanceof Player) {
                     if ($this->homeData->exists($sender->getName())) {
-                        if(($level = $this->checkLevel($data[3])) == false) {
-                            $homeX = $this->homeData->get($sender->getName())[0];
-                            $homeY = $this->homeData->get($sender->getName())[1];
-                            $homeZ = $this->homeData->get($sender->getName())[2];
-                            $homeLevel = $this->homeData->get($sender->getName())[3];
-                            $pos = new Position((int) $homeX, (int) $homeY, (int) $homeZ, $homeLevel);
-                            //$pos = new Position(array((int)$this->homeData->get($sender->getName())[0], (int)$this->homeData->get($sender->getName())[1], (int)$this->homeData->get($sender->getName())[2], $this->homeData->get($sender->getName())[3]));
-                            $sender->teleport($pos);
-                        }
-                        else {
-                            $sender->sendMessage($homeLevel . " is not loaded!");
+                        $homeX = $this->homeData->get($sender->getName())[0];
+                        $homeY = $this->homeData->get($sender->getName())[1];
+                        $homeZ = $this->homeData->get($sender->getName())[2];
+                        $homeLevel = $this->homeData->get($sender->getName())[3];
+                        $pos = new Position((int) $homeX, (int) $homeY, (int) $homeZ, $homeLevel);
+                        foreach ($this->getServer()->getLevels() as $levelToCheck) {
+                            if ($homeLevel === $levelToCheck->getName()) {
+                                $sender->teleport($pos);
+                            }
+                            else {
+                                $sender->sendMessage("That world is not loaded!");
+                            }
                         }
                     }
                     else {
@@ -51,7 +52,7 @@ class SimpleHome extends PluginBase{
                 break;
             case "sethome":
                 if ($sender instanceof Player) {
-                        $data = $this->homeData->set($sender->getName(), array((int) $sender->x, (int) $sender->y, (int) $sender->z, $sender->getLevel()->getName()));
+                        $this->homeData->set($sender->getName(), array((int) $sender->x, (int) $sender->y, (int) $sender->z, $sender->getLevel()->getName()));
                         $this->homeData->save();
                         $sender->sendMessage("Your home is set.");
                         $this->getLogger()->info($sender->getName() . " has set their home in world " . $sender->getLevel()->getName());
@@ -64,15 +65,6 @@ class SimpleHome extends PluginBase{
             default:
                 return false;
         }
-    }
-
-    public function checkLevel($homeLevel){
-        foreach ($this->getServer()->getLevels() as $levelToCheck) {
-            if ($homeLevel === $levelToCheck->getName()) {
-                return $levelToCheck;
-            }
-        }
-        return false;
     }
 
     public function onDisable(){
