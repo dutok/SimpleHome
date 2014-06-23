@@ -17,7 +17,7 @@ Commands | Description | Permission
 /sethome | Sets your home. | simplehome.sethome
 
 ## To-do:
-
+- Allow staff to teleport to people's homes
 
 
 
