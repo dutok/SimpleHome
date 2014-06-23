@@ -7,12 +7,16 @@ use pocketmine\command\CommandSender;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use pocketmine\level\Position;
+use pocketmine\level\Level;
 
 class SimpleHome extends PluginBase{
 
+    public $homeData;
+
     public function onEnable(){
         @mkdir($this->getDataFolder());
-        $this->config = new Config($this->getDataFolder()."homes.yml", Config::YAML, array());
+        $this->homeData = new Config($this->getDataFolder()."homes.yml", Config::YAML, array());
         $this->getLogger()->info("SimpleHome has loaded!");
 
     }
@@ -21,9 +25,19 @@ class SimpleHome extends PluginBase{
         switch($command->getName()){
             case "home":
                 if ($sender instanceof Player) {
-                    if (isset($args[0])){
-                        //execute command here
+                    if ($this->homeData->exists($sender->getName())) {
+                        $homeX = $this->homeData->get($sender->getName())[0];
+                        $homeY = $this->homeData->get($sender->getName())[1];
+                        $homeZ = $this->homeData->get($sender->getName())[2];
+                        $homeLevel = $this->homeData->get($sender->getName())[3];
+                        $pos = new Position((int) $homeX, (int) $homeY, (int) $homeZ, $homeLevel);
+                        //$pos = new Position(array((int)$this->homeData->get($sender->getName())[0], (int)$this->homeData->get($sender->getName())[1], (int)$this->homeData->get($sender->getName())[2], $this->homeData->get($sender->getName())[3]));
+                        $sender->teleport($pos);
                     }
+                    else {
+                        $sender->sendMessage("Please set your home before using this command.");
+                    }
+                break;
                 }
                 else {
                     $sender->sendMessage("Please run command in game.");
@@ -32,10 +46,10 @@ class SimpleHome extends PluginBase{
                 break;
             case "sethome":
                 if ($sender instanceof Player) {
-                        $this->config->set($sender->getDisplayName(), array((int) $sender->x, (int) $sender->y, (int) $sender->z, $sender->getLevel()->getName()));
-                        $this->config->save();
+                        $this->homeData->set($sender->getName(), array((int) $sender->x, (int) $sender->y, (int) $sender->z, $sender->getLevel()->getName()));
+                        $this->homeData->save();
                         $sender->sendMessage("Your home is set.");
-                        $this->getLogger()->info($sender->getDisplayName() . " has set their home in world " . $sender->getLevel()->getName());
+                        $this->getLogger()->info($sender->getName() . " has set their home in world " . $sender->getLevel()->getName());
                 }
                 else {
                     $sender->sendMessage("Please run command in game.");
@@ -49,7 +63,7 @@ class SimpleHome extends PluginBase{
 
     public function onDisable(){
         $this->getLogger()->info("SimpleHome has loaded!");
-        $this->config->save();
-
+        $this->homeData->save();
     }
+
 }
