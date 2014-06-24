@@ -70,7 +70,7 @@ class SimpleHome extends PluginBase{
     }
 
     public function onDisable(){
-        $this->getLogger()->info("SimpleHome has loaded!");
+        $this->getLogger()->info("SimpleHome has disabled!");
         $this->homeData->save();
     }
 
