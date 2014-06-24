@@ -15,6 +15,7 @@ class SimpleHome extends PluginBase{
     public $homeData;
 
     public function onEnable(){
+        @mkdir($this->getDataFolder());
         if(!file_exists($this->getDataFolder() . "homes.db")){
             $this->database = new \SQLite3($this->getDataFolder() . "homes.db", SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
             $resource = $this->getResource("sqlite3.sql");
@@ -23,7 +24,6 @@ class SimpleHome extends PluginBase{
             $this->database = new \SQLite3($this->getDataFolder() . "homes.db", SQLITE3_OPEN_READWRITE);
         }
         $this->getLogger()->info("SimpleHome has loaded!");
-
     }
 
     public function onCommand(CommandSender $sender, Command $command, $label, array $args){
