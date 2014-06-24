@@ -15,8 +15,9 @@ class SimpleHome extends PluginBase{
     public $homeData;
 
     public function onEnable(){
-        @mkdir($this->getDataFolder());
-        $this->homeData = new Config($this->getDataFolder()."homes.yml", Config::YAML, array());
+        $this->saveDefaultConfig();
+        $this->reloadConfig();
+        $provider = new SQLite3DataProvider($this);
         $this->getLogger()->info("SimpleHome has loaded!");
 
     }
