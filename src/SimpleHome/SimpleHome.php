@@ -15,12 +15,12 @@ class SimpleHome extends PluginBase{
     public $homeData;
 
     public function onEnable(){
-        if(!file_exists($this->getDataFolder() . "players.db")){
-            $this->database = new \SQLite3($this->getDataFolder() . "players.db", SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
+        if(!file_exists($this->getDataFolder() . "homes.db")){
+            $this->database = new \SQLite3($this->getDataFolder() . "homes.db", SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
             $resource = $this->getResource("sqlite3.sql");
             $this->database->exec(stream_get_contents($resource));
         }else{
-            $this->database = new \SQLite3($this->getDataFolder() . "players.db", SQLITE3_OPEN_READWRITE);
+            $this->database = new \SQLite3($this->getDataFolder() . "homes.db", SQLITE3_OPEN_READWRITE);
         }
         $this->getLogger()->info("SimpleHome has loaded!");
 
@@ -39,7 +39,40 @@ class SimpleHome extends PluginBase{
                 break;
             case "sethome":
                 if ($sender instanceof Player) {
-                        
+                    $name = trim(strtolower($sender->getName()));
+                    $world = trim(strtolower($sender->getLevel()->getName()));
+                    $x = (int) $sender->x;
+                    $y = (int) $sender->y;
+                    $z = (int) $sender->z;
+
+                    $name = trim(strtolower($sender->getName()));
+                    $prepare = $this->database->prepare("SELECT * FROM homes WHERE name = :name");
+                    $prepare->bindValue(":name", $name, SQLITE3_TEXT);
+
+                    $result = $prepare->execute();
+
+                    if($result instanceof \SQLite3Result){
+                        $data = $result->fetchArray(SQLITE3_ASSOC);
+                        $result->finalize();
+                        if(isset($data["name"])) {
+                            $prepare = $this->database->prepare("UPDATE homes SET world = :world, x = :x, y = :y, z = :z WHERE name = :name");
+                            $prepare->bindValue(":name", $name, SQLITE3_TEXT);
+                            $prepare->bindValue(":world", $world, SQLITE3_TEXT);
+                            $prepare->bindValue(":x", $x, SQLITE3_INTEGER);
+                            $prepare->bindValue(":y", $y, SQLITE3_INTEGER);
+                            $prepare->bindValue(":z", $z, SQLITE3_INTEGER);
+                            $prepare->execute();
+                        }
+                        else {
+                            $prepare = $this->database->prepare("INSERT INTO homes (name, world, x, y, z) VALUES (:name, :world, :x, :y, :z)");
+                            $prepare->bindValue(":name", $name, SQLITE3_TEXT);
+                            $prepare->bindValue(":world", $world, SQLITE3_TEXT);
+                            $prepare->bindValue(":x", $x, SQLITE3_INTEGER);
+                            $prepare->bindValue(":y", $y, SQLITE3_INTEGER);
+                            $prepare->bindValue(":z", $z, SQLITE3_INTEGER);
+                            $prepare->execute();
+                        }
+                    }
                 }
                 else {
                     $sender->sendMessage("Please run command in game.");
@@ -53,7 +86,10 @@ class SimpleHome extends PluginBase{
 
     public function onDisable(){
         $this->getLogger()->info("SimpleHome has loaded!");
-        $this->homeData->save();
     }
+
+}
+
+class DB extends \SQLite3 {
 
 }
