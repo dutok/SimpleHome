@@ -30,6 +30,32 @@ class SimpleHome extends PluginBase{
         switch($command->getName()){
             case "home":
                 if ($sender instanceof Player) {
+                    $name = trim(strtolower($sender->getName()));
+                    $prepare = $this->database->prepare("SELECT * FROM homes WHERE name = :name");
+                    $prepare->bindValue(":name", $name, SQLITE3_TEXT);
+
+                    $result = $prepare->execute();
+
+                    if($result instanceof \SQLite3Result){
+                        $data = $result->fetchArray(SQLITE3_ASSOC);
+                        $result->finalize();
+                        $dataWorld = $data['world'];
+                        $dataX = $data['x'];
+                        $dataY = $data['y'];
+                        $dataZ = $data['z'];
+                        foreach ($this->getServer()->getLevels() as $levelsLoaded => $levelLoaded) {
+                            if ($dataWorld === $levelLoaded->getName()) {
+                                $actualLevel = $levelLoaded;
+                                $pos = new Position((int) $dataX, (int) $dataY, (int) $dataZ, $actualLevel);
+                                $sender->teleport($pos);
+                                $sender->sendMessage("You teleported home.");
+                            }
+                            else {
+                                $sender->sendMessage("That world is not loaded!");
+                            }
+                        }
+
+                    }
 
                 }
                 else {
@@ -87,9 +113,5 @@ class SimpleHome extends PluginBase{
     public function onDisable(){
         $this->getLogger()->info("SimpleHome has loaded!");
     }
-
-}
-
-class DB extends \SQLite3 {
 
 }
