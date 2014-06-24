@@ -15,9 +15,13 @@ class SimpleHome extends PluginBase{
     public $homeData;
 
     public function onEnable(){
-        $this->saveDefaultConfig();
-        $this->reloadConfig();
-        $provider = new SQLite3DataProvider($this);
+        if(!file_exists($this->getDataFolder() . "players.db")){
+            $this->database = new \SQLite3($this->getDataFolder() . "players.db", SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
+            $resource = $this->getResource("sqlite3.sql");
+            $this->database->exec(stream_get_contents($resource));
+        }else{
+            $this->database = new \SQLite3($this->getDataFolder() . "players.db", SQLITE3_OPEN_READWRITE);
+        }
         $this->getLogger()->info("SimpleHome has loaded!");
 
     }
@@ -26,27 +30,7 @@ class SimpleHome extends PluginBase{
         switch($command->getName()){
             case "home":
                 if ($sender instanceof Player) {
-                    if ($this->homeData->exists($sender->getName())) {
-                        $homeX = $this->homeData->get($sender->getName())[0];
-                        $homeY = $this->homeData->get($sender->getName())[1];
-                        $homeZ = $this->homeData->get($sender->getName())[2];
-                        $homeLevel = $this->homeData->get($sender->getName())[3];
-                        foreach ($this->getServer()->getLevels() as $levelsLoaded => $levelLoaded) {
-                            if ($homeLevel === $levelLoaded->getName()) {
-                                $actualLevel = $levelLoaded;
-                                $pos = new Position((int) $homeX, (int) $homeY, (int) $homeZ, $actualLevel);
-                                $sender->teleport($pos);
-                                $sender->sendMessage("You teleported home.");
-                            }
-                            else {
-                                $sender->sendMessage("That world is not loaded!");
-                            }
-                        }
-                    }
-                    else {
-                        $sender->sendMessage("Please set your home before using this command.");
-                    }
-                break;
+
                 }
                 else {
                     $sender->sendMessage("Please run command in game.");
@@ -55,10 +39,7 @@ class SimpleHome extends PluginBase{
                 break;
             case "sethome":
                 if ($sender instanceof Player) {
-                        $this->homeData->set($sender->getName(), array((int) $sender->x, (int) $sender->y, (int) $sender->z, $sender->getLevel()->getName()));
-                        $this->homeData->save();
-                        $sender->sendMessage("Your home is set.");
-                        $this->getLogger()->info($sender->getName() . " has set their home in world " . $sender->getLevel()->getName());
+                        
                 }
                 else {
                     $sender->sendMessage("Please run command in game.");
