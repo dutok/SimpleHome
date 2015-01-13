@@ -20,6 +20,7 @@ class SimpleHome extends PluginBase{
             $this->database = new \SQLite3($this->getDataFolder() . "homes.db", SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
             $resource = $this->getResource("sqlite3.sql");
             $this->database->exec(stream_get_contents($resource));
+            @fclose($resource);
         }else{
             $this->database = new \SQLite3($this->getDataFolder() . "homes.db", SQLITE3_OPEN_READWRITE);
         }
