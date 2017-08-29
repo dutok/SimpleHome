@@ -14,6 +14,9 @@ class SimpleHome extends PluginBase{
 
     public $homeData;
 
+    /**
+     * @return void
+     */
     public function onEnable(){
         @mkdir($this->getDataFolder());
         if(!file_exists($this->getDataFolder() . "homes.db")){
@@ -27,6 +30,14 @@ class SimpleHome extends PluginBase{
         $this->getLogger()->info("SimpleHome has loaded!");
     }
 
+    /**
+     * @param CommandSender $sender
+     * @param Command $command
+     * @param string $label
+     * @param string[] $args
+     *
+     * @return bool
+     */
     public function onCommand(CommandSender $sender, Command $command, $label, array $args){
         switch($command->getName()){
             case "home":
